@@ -1,103 +1,233 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useEffect } from 'react'
+import { CodeIntake } from '@/components/code-intake'
+import { FindingsDashboard } from '@/components/findings-dashboard'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { ArrowLeft, Plus, History, Shield, ArrowUp, Sparkles, Zap, Lock, Github } from 'lucide-react'
+
+interface Project {
+  id: string
+  name: string
+  source_type: string
+  status: string
+  created_at: string
+  findings: { count: number }[]
+  files: { count: number }[]
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [currentProject, setCurrentProject] = useState<Project | null>(null)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showScroll, setShowScroll] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    fetchProjects()
+    const onScroll = () => setShowScroll(window.scrollY > 200)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('/api/projects')
+      if (response.ok) {
+        const data = await response.json()
+        setProjects(data)
+      }
+    } catch (error) {
+      console.error('Error fetching projects:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleProjectCreated = (project: Project) => {
+    setCurrentProject(project)
+    fetchProjects() // Refresh the projects list
+  }
+
+  const handleBackToProjects = () => {
+    setCurrentProject(null)
+  }
+
+  const handleNewScan = () => {
+    setCurrentProject(null)
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  if (currentProject) {
+    return (
+      <div className="min-h-screen bg-transparent">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              onClick={handleBackToProjects}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Projects
+            </Button>
+          </div>
+          
+          <FindingsDashboard
+            projectId={currentProject.id}
+            projectName={currentProject.name}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-transparent">
+      {/* Hero Section */}
+      <section className="w-full flex flex-col items-center justify-center pt-16 pb-10 text-center animate-fade-in-slow">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent drop-shadow-lg mb-4 flex items-center justify-center gap-2">
+            <Sparkles className="h-10 w-10 text-yellow-300 animate-spin-slow" />
+            CodeSecure
+          </h1>
+          <p className="text-lg md:text-2xl text-white/80 font-medium mb-8">
+            AI-powered vulnerability scanner that helps you ship secure code with confidence.
+          </p>
+          <Button
+            size="lg"
+            className="px-8 py-4 text-lg font-bold shadow-xl animate-bounce bg-gradient-to-r from-blue-500 to-cyan-400 border-0"
+            onClick={() => document.getElementById('intake')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <Zap className="h-5 w-5 mr-2 animate-pulse" />
+            Start Free Scan
+          </Button>
+          <div className="flex justify-center gap-4 mt-6">
+            <a href="https://github.com/" target="_blank" rel="noopener" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors">
+              <Github className="h-4 w-4" /> View on GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* Features Section */}
+      <section id="features" className="w-full max-w-5xl mx-auto grid md:grid-cols-3 gap-8 px-4 mb-16 animate-fade-in-slow">
+        <Card className="glass card text-center p-6">
+          <CardHeader>
+            <Shield className="h-8 w-8 mx-auto text-blue-400 mb-2 animate-pulse" />
+            <CardTitle>AI-Powered Analysis</CardTitle>
+            <CardDescription>Advanced pattern recognition detects SQL injection, XSS, hardcoded secrets, and more.</CardDescription>
+          </CardHeader>
+        </Card>
+        <Card className="glass card text-center p-6">
+          <CardHeader>
+            <Zap className="h-8 w-8 mx-auto text-cyan-400 mb-2 animate-bounce" />
+            <CardTitle>Instant Fixes</CardTitle>
+            <CardDescription>Get actionable fixes for each vulnerability with downloadable patches.</CardDescription>
+          </CardHeader>
+        </Card>
+        <Card className="glass card text-center p-6">
+          <CardHeader>
+            <Lock className="h-8 w-8 mx-auto text-purple-400 mb-2 animate-spin-slow" />
+            <CardTitle>Multiple Sources</CardTitle>
+            <CardDescription>Connect GitHub repos, upload files, or paste code directly for analysis.</CardDescription>
+          </CardHeader>
+        </Card>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* Code Intake Section */}
+      <section id="intake" className="w-full max-w-2xl mx-auto mb-16 animate-fade-in-slow">
+        <CodeIntake onProjectCreated={handleProjectCreated} />
+      </section>
+
+      {/* Recent Projects Section */}
+      <section className="w-full max-w-4xl mx-auto mb-16 animate-fade-in-slow">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-semibold flex items-center gap-2 text-white">
+            <History className="h-6 w-6" />
+            Recent Scans
+          </h2>
+          <Button
+            onClick={handleNewScan}
+            className="flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            New Scan
+          </Button>
+        </div>
+        {loading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400 mx-auto"></div>
+            <p className="mt-2 text-white/70">Loading projects...</p>
+          </div>
+        ) : projects.length === 0 ? (
+          <Card className="glass card">
+            <CardContent className="p-8 text-center">
+              <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4 animate-pulse" />
+              <h3 className="text-lg font-semibold mb-2">No scans yet</h3>
+              <p className="text-muted-foreground">
+                Start your first vulnerability scan above to see your projects here.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4">
+            {projects.map((project) => (
+              <Card
+                key={project.id}
+                className="glass card cursor-pointer hover:shadow-2xl transition-shadow"
+                onClick={() => setCurrentProject(project)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold mb-1 text-white/90">{project.name}</h3>
+                      <div className="flex items-center gap-4 text-sm text-white/60">
+                        <span className="flex items-center gap-1">
+                          <Badge variant="outline" className="text-xs">
+                            {project.source_type}
+                          </Badge>
+                        </span>
+                        <span>{project.files?.[0]?.count || 0} files</span>
+                        <span>{project.findings?.[0]?.count || 0} findings</span>
+                        <span>
+                          {new Date(project.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant={
+                          project.status === 'completed' ? 'low' :
+                          project.status === 'scanning' ? 'medium' :
+                          'high'
+                        }
+                      >
+                        {project.status}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Scroll to Top Button */}
+      {showScroll && (
+        <button className="scroll-to-top" onClick={scrollToTop} aria-label="Scroll to top">
+          <ArrowUp className="h-6 w-6" />
+        </button>
+      )}
     </div>
-  );
+  )
 }
