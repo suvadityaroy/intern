@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        border: 'hsl(var(--border))',
+        border: '#d1d5db', // ensure border-border utility works
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: 'hsl(var(--card))',
@@ -25,7 +25,6 @@ module.exports = {
         'destructive-foreground': 'hsl(var(--destructive-foreground))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        border: '#d1d5db', // generic gray color for border-border utility
       },
       borderRadius: {
         lg: 'var(--radius)',
