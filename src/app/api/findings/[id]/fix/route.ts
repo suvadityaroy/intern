@@ -4,8 +4,9 @@ import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
   try {
     // Get the finding
     const { data: finding, error: findingError } = await supabase
