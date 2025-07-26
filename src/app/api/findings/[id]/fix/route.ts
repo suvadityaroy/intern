@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/database'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function POST(
   request: NextRequest,
-  context: Record<string, any>
+  context: Record<string, unknown>
 ) {
-  const { params } = context;
+  const params = context.params as { id: string };
   try {
     // Get the finding
     const { data: finding, error: findingError } = await supabase
