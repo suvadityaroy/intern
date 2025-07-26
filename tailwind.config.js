@@ -25,7 +25,7 @@ module.exports = {
         'destructive-foreground': 'hsl(var(--destructive-foreground))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        border: '#e5e7eb',
+        border: '#d1d5db', // generic gray color for border-border utility
       },
       borderRadius: {
         lg: 'var(--radius)',
