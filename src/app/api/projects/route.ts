@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/database'
 import { GitHubService } from '@/lib/github-service'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
-import { createHash } from 'crypto'
+
+type ProjectFile = {
+  id: string;
+  project_id: string;
+  path: string;
+  content?: string;
+  hash?: string;
+};
 
 export async function POST(request: NextRequest) {
   try {
