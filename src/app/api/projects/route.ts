@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create project' }, { status: 500 })
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let files: any[] = []
 
     // Handle different source types

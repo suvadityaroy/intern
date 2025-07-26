@@ -27,24 +27,22 @@ export function FindingsDashboard({ projectId, projectName }: FindingsDashboardP
   const [fixLoading, setFixLoading] = useState<string | null>(null)
   const [fixes, setFixes] = useState<Record<string, unknown>>({})
 
-  // Move fetchFindings above useEffect
-  const fetchFindings = async () => {
-    try {
-      const response = await fetch(`/api/projects/${projectId}/findings`)
-      if (response.ok) {
-        const data = await response.json()
-        setFindings(data)
-      }
-    } catch (error) {
-      console.error('Error fetching findings:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
+    const fetchFindings = async () => {
+      try {
+        const response = await fetch(`/api/projects/${projectId}/findings`)
+        if (response.ok) {
+          const data = await response.json()
+          setFindings(data)
+        }
+      } catch (error) {
+        console.error('Error fetching findings:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
     fetchFindings()
-  }, [projectId, fetchFindings])
+  }, [projectId])
 
   const handleRequestFix = async (findingId: string) => {
     setFixLoading(findingId)
