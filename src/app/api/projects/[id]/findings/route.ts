@@ -4,7 +4,8 @@ import { supabase } from '@/lib/database'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function GET(
   request: NextRequest,
-  context
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context: any
 ) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { params } = context;
