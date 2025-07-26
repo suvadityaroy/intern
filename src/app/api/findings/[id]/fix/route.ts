@@ -4,7 +4,7 @@ import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
 
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: any }
 ) {
   const { params } = context;
   try {
