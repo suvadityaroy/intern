@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/database'
 import { GitHubService } from '@/lib/github-service'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
-import md5 from 'md5'
+import { md5 } from '@/lib/md5'
 
 
 export async function POST(request: NextRequest) {
