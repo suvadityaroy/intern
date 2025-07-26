@@ -220,7 +220,7 @@ export function FindingsDashboard({ projectId, projectName }: FindingsDashboardP
                 </div>
 
                 {/* Fix Section */}
-                {fixes[finding.id] && typeof fixes[finding.id] === 'object' && fixes[finding.id] !== null && 'fixed_code' in fixes[finding.id] ? (
+                {fixes[finding.id] && typeof fixes[finding.id] === 'object' && fixes[finding.id] !== null && 'fixed_code' in (fixes[finding.id] as object) ? (
                   <div className="space-y-3">
                     <h4 className="text-sm font-medium">Generated Fix:</h4>
                     <pre className="bg-green-50 border border-green-200 p-3 rounded-md text-sm font-mono overflow-x-auto">
