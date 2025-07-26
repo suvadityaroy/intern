@@ -3,6 +3,7 @@ import { supabase } from '@/lib/database'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
 export async function POST(
   request: NextRequest,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context: any
 ) {
   const { params } = context;

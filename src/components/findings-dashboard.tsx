@@ -42,10 +42,9 @@ export function FindingsDashboard({ projectId, projectName }: FindingsDashboardP
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchFindings()
-  }, [projectId])
+  }, [projectId, fetchFindings])
 
   const handleRequestFix = async (findingId: string) => {
     setFixLoading(findingId)
