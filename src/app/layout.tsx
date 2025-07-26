@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         {/* Navbar */}
-        <nav className="w-full px-6 py-4 flex items-center justify-between bg-background/80 backdrop-blur border-b border-border sticky top-0 z-20 shadow-sm animate-fade-in">
+        <nav className="w-full px-6 py-4 flex items-center justify-between bg-background/80 backdrop-blur border-b border-gray-200 sticky top-0 z-20 shadow-sm animate-fade-in">
           <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
             <span className="inline-block w-8 h-8 bg-gradient-to-tr from-primary to-accent rounded-full mr-2 animate-bounce shadow-lg" />
             CodeSecure
@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
 
         {/* Footer */}
-        <footer className="w-full py-6 px-4 text-center text-muted-foreground text-xs border-t border-border bg-background/80 backdrop-blur animate-fade-in">
+        <footer className="w-full py-6 px-4 text-center text-muted-foreground text-xs border-t border-gray-200 bg-background/80 backdrop-blur animate-fade-in">
           <span>© {new Date().getFullYear()} CodeSecure. Built with ❤️ for secure code development.</span>
         </footer>
       </body>
