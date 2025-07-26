@@ -3,8 +3,7 @@ import { supabase } from '@/lib/database'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
 export async function POST(
   request: NextRequest,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context: any
+  context: { params: { id: string } }
 ) {
   const { params } = context;
   try {
@@ -65,7 +64,8 @@ function generateDiff(original: string, fixed: string): string {
     const originalLine = originalLines[i] || ''
     const fixedLine = fixedLines[i] || ''
     
-    if (originalLine !== fixedLine) {
+    // Updated handler signature for Next.js API route compatibility
+    if (originalLine.trim() !== fixedLine.trim()) {
       diff += `- ${originalLine}\n`
       diff += `+ ${fixedLine}\n`
     } else {
