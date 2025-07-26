@@ -3,9 +3,9 @@ import { supabase } from '@/lib/database'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
 export async function POST(
   request: NextRequest,
-  context: Record<string, unknown>
+  context: { params: { id: string } }
 ) {
-  const params = context.params as { id: string };
+  const { params } = context;
   try {
     // Get the finding
     const { data: finding, error: findingError } = await supabase
