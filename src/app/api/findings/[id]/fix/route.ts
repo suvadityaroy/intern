@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/database'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function POST(
-  request: NextRequest,
-  context: any
-) {
-  const { params } = context;
+export async function POST(request: NextRequest) {
+  // Extract id from the URL
+  const url = new URL(request.url);
+  const id = url.pathname.split('/').slice(-2)[0];
   try {
     // Get the finding
     const { data: finding, error: findingError } = await supabase
       .from('findings')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (findingError || !finding) {
@@ -30,7 +28,7 @@ export async function POST(
     const { data: fix, error: fixError } = await supabase
       .from('fixes')
       .insert({
-        finding_id: params.id,
+        finding_id: id,
         diff,
         created_at: new Date().toISOString(),
         status: 'pending'
