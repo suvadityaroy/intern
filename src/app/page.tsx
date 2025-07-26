@@ -3,20 +3,15 @@
 import { useState, useEffect } from 'react'
 import { CodeIntake } from '@/components/code-intake'
 import { FindingsDashboard } from '@/components/findings-dashboard'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Plus, History, Shield, ArrowUp, Sparkles, Zap, Lock, Github } from 'lucide-react'
+import {
+  ArrowLeft, Plus, History, Shield, ArrowUp, Sparkles, Zap, Lock, Github
+} from 'lucide-react'
 
-interface Project {
-  id: string
-  name: string
-  source_type: string
-  status: string
-  created_at: string
-  findings: { count: number }[]
-  files: { count: number }[]
-}
+import type { Project } from '@/lib/database'
 
 export default function Home() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
@@ -79,7 +74,7 @@ export default function Home() {
           
           <FindingsDashboard
             projectId={currentProject.id}
-            projectName={currentProject.name}
+            projectName={currentProject.name ?? ''}
           />
         </div>
       </div>
@@ -196,8 +191,8 @@ export default function Home() {
                             {project.source_type}
                           </Badge>
                         </span>
-                        <span>{project.files?.[0]?.count || 0} files</span>
-                        <span>{project.findings?.[0]?.count || 0} findings</span>
+                        {/* <span>{project.files?.[0]?.count || 0} files</span> */}
+                        {/* <span>{project.findings?.[0]?.count || 0} findings</span> */}
                         <span>
                           {new Date(project.created_at).toLocaleDateString()}
                         </span>
