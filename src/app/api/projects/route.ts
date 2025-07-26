@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/database'
 import { GitHubService } from '@/lib/github-service'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
+import md5 from 'md5'
 
 
 export async function POST(request: NextRequest) {
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'Code content required' }, { status: 400 })
         }
         
-        const hash = createHash('md5').update(code_content).digest('hex')
+        const hash = md5(code_content)
         files = [{
           id: `${project.id}-pasted-code`,
           project_id: project.id,
