@@ -3,7 +3,7 @@ import { supabase } from '@/lib/database'
 import { VulnerabilityScanner } from '@/lib/vulnerability-scanner'
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: Record<string, any>
 ) {
   const { params } = context;
   try {
